@@ -1036,7 +1036,7 @@ class TranscodePerturbation(Perturbation):
             rate = rates[random.randint(0, len(rates) - 1)]
             _ = subprocess.check_output(
                 f"sox {orig_f.name} -V0 -C {rate} -t amr-nb - | sox -t amr-nb - -V0 -b 16 -r 16000 {transcoded_f.name}",
-                shell=True,
+                shell=False,
             )
         elif self._codecs[codec_ind] == "ogg":
             transcoded_f = NamedTemporaryFile(suffix="_ogg.wav")
@@ -1044,13 +1044,13 @@ class TranscodePerturbation(Perturbation):
             rate = rates[random.randint(0, len(rates) - 1)]
             _ = subprocess.check_output(
                 f"sox {orig_f.name} -V0 -C {rate} -t ogg - | sox -t ogg - -V0 -b 16 -r 16000 {transcoded_f.name}",
-                shell=True,
+                shell=False,
             )
         elif self._codecs[codec_ind] == "g711":
             transcoded_f = NamedTemporaryFile(suffix="_g711.wav")
             _ = subprocess.check_output(
                 f"sox {orig_f.name} -V0  -r 8000 -c 1 -e a-law {transcoded_f.name} lowpass 3400 highpass 300",
-                shell=True,
+                shell=False,
             )
 
         new_data = AudioSegment.from_file(transcoded_f.name, target_sr=16000)
